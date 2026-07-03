@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ---- Color tokens ---- */
+  --color-ink-950: #0E1015;
+  --color-ink-900: #14161C;
+  --color-ink-800: #1C1F28;
+  --color-ink-700: #262A36;
+  --color-ink-600: #353A48;
+  --color-ink-500: #4B5163;
+  --color-ink-400: #6B7184;
+  --color-ink-300: #9499A8;
+  --color-paper-50: #F2F0EC;
+  --color-paper-100: #EBE8E1;
+  --color-paper-200: #DDD9CF;
+  --color-paper-900: #14161C;
+
+  --color-violet-500: #6E5BFF;
+  --color-violet-400: #8B7AFF;
+  --color-violet-600: #5944E0;
+  --color-violet-glow: #6E5BFF33;
+
+  --color-mint-500: #3DDC97;
+  --color-amber-500: #FFB454;
+  --color-coral-500: #FF6B6B;
+
+  /* ---- Fonts ---- */
+  --font-display: "Space Grotesk", "system-ui", sans-serif;
+  --font-body: "Inter", "system-ui", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* ---- Motion ---- */
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+  }
+  body {
+    @apply bg-paper-50 text-ink-900 dark:bg-ink-900 dark:text-paper-50;
+    transition: background-color 0.25s var(--ease-snap), color 0.25s var(--ease-snap);
+  }
+  ::selection {
+    background-color: var(--color-violet-glow);
+  }
+  /* visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-violet-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-ink-600);
+    border-radius: 999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
