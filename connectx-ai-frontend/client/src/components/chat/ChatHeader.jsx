@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, Phone, Video, MoreVertical, Sparkles, BookOpen, Users } from "lucide-react";
+import { ArrowLeft, Video, MoreVertical, Sparkles, BookOpen, Users, Phone } from "lucide-react";
 import Avatar from "../common/Avatar";
 import { formatLastSeen } from "../../utils/formatTime";
 import useChatStore from "../../store/useChatStore";
@@ -42,70 +42,94 @@ export default function ChatHeader({ chat, onBack }) {
 
   return (
     <>
-      <header className="flex items-center gap-3 px-5 py-4 border-b border-paper-200 dark:border-ink-800/50 bg-paper-100/80 dark:bg-ink-900/40 backdrop-blur-md shrink-0 transition-colors duration-300">
-        {/* Back button (mobile) */}
-        <button onClick={onBack} className="md:hidden p-2 rounded-xl text-ink-500 hover:text-ink-900 dark:text-ink-400 dark:hover:text-paper-50 hover:bg-paper-200 dark:hover:bg-ink-800/50 transition-all duration-200">
-          <ArrowLeft size={20} />
-        </button>
+      <header className="flex items-center justify-between px-5 py-3.5 border-b border-[#E9E6DF] dark:border-[#2A2F45] bg-[#FFFFFF]/90 dark:bg-[#111318]/90 backdrop-blur-md shrink-0 transition-colors duration-300 relative z-20">
+        
+        {/* Left side: Back + User Info */}
+        <div className="flex items-center gap-2">
+          {/* Back button (mobile) */}
+          <button onClick={onBack} className="md:hidden p-2 rounded-xl text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200 shrink-0">
+            <ArrowLeft size={20} />
+          </button>
 
-        {/* Avatar + name */}
-        <button
-          onClick={() => isGroup && setShowGroupInfo(true)}
-          className="flex items-center gap-3 flex-1 min-w-0 text-left rounded-2xl p-2 hover:bg-paper-200/50 dark:hover:bg-ink-800/30 transition-all duration-200"
-        >
-          <Avatar name={name} src={avatar} size="sm" online={!isGroup ? isOnline : undefined} />
-          <div className="min-w-0">
-            <p className="font-bold text-ink-900 dark:text-paper-50 text-base truncate">{name}</p>
-            <p className={`text-sm truncate transition-colors font-medium ${isTyping ? "text-violet-500 dark:text-violet-400" : "text-ink-500"}`}>
-              {statusText}
-            </p>
-          </div>
-        </button>
+          {/* Avatar + name */}
+          <button
+            onClick={() => isGroup && setShowGroupInfo(true)}
+            className="flex items-center gap-3 px-2 py-1.5 rounded-2xl hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200 text-left"
+          >
+            <Avatar name={name} src={avatar} size="sm" online={!isGroup ? isOnline : undefined} />
+            <div className="flex flex-col">
+              <span className="font-display font-bold text-[15px] text-[#18192A] dark:text-[#F0EEEA] leading-tight truncate">
+                {name}
+              </span>
+              <span className={`text-[12px] font-medium leading-tight mt-0.5 transition-colors
+                ${isTyping ? "text-[#7C5CFF] animate-pulse" : isOnline ? "text-[#22D3A0]" : "text-[#9AA0B8] dark:text-[#5B6180]"}`}>
+                {statusText}
+              </span>
+            </div>
+          </button>
+        </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        {/* Right side: Actions */}
+        <div className="flex items-center gap-1">
           <button
             id="summarize-chat-btn"
             onClick={() => setShowSummarize(true)}
             title="AI Summarize"
-            className="p-2.5 rounded-xl text-ink-500 hover:text-violet-600 dark:text-ink-400 dark:hover:text-violet-400 hover:bg-violet-500/10 dark:hover:bg-violet-500/20 transition-all duration-200 shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-[#7C5CFF] hover:bg-[#7C5CFF]/10 hover:scale-105 active:scale-95 transition-all duration-200"
           >
-            <Sparkles size={19} />
+            <Sparkles size={18} strokeWidth={2.5} />
           </button>
+          
           {isGroup && (
             <button
               id="group-info-btn"
               onClick={() => setShowGroupInfo(true)}
               title="Group Info"
-              className="p-2.5 rounded-xl text-ink-500 hover:text-ink-900 hover:bg-paper-200 dark:text-ink-400 dark:hover:text-paper-50 dark:hover:bg-ink-800/50 transition-all duration-200"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200"
             >
-              <Users size={19} />
+              <Users size={18} strokeWidth={2.5} />
             </button>
           )}
+
+          <div className="w-px h-6 bg-[#E9E6DF] dark:bg-[#2A2F45] mx-1" />
+
           <button
-            className="p-2.5 rounded-xl text-ink-500 hover:text-ink-900 hover:bg-paper-200 dark:text-ink-400 dark:hover:text-paper-50 dark:hover:bg-ink-800/50 transition-all duration-200"
-            title="Video Call (coming soon)"
+            title="Voice Call"
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200"
           >
-            <Video size={19} />
+            <Phone size={18} strokeWidth={2.5} />
           </button>
+
+          <button
+            title="Video Call"
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200"
+          >
+            <Video size={18} strokeWidth={2.5} />
+          </button>
+
           <div className="relative">
             <button
               onClick={() => setShowMenu((s) => !s)}
-              className="p-2.5 rounded-xl text-ink-500 hover:text-ink-900 hover:bg-paper-200 dark:text-ink-400 dark:hover:text-paper-50 dark:hover:bg-ink-800/50 transition-all duration-200"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-all duration-200"
             >
-              <MoreVertical size={19} />
+              <MoreVertical size={18} strokeWidth={2.5} />
             </button>
+            
             {showMenu && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-paper-50/95 dark:bg-ink-900/95 backdrop-blur-xl border border-paper-200 dark:border-ink-700/50 rounded-2xl shadow-2xl shadow-violet-500/10 z-30 py-2 overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-[#1A1D27] border border-[#E9E6DF] dark:border-[#2A2F45] rounded-2xl shadow-xl shadow-black/10 dark:shadow-black/50 z-30 py-2 animate-scale-in origin-top-right">
                 {[
                   { label: "View Profile", icon: BookOpen },
                   { label: "Mute Notifications", icon: null },
-                  { label: "Clear Chat", icon: null },
-                ].map(({ label }) => (
+                  { label: "Clear Chat", icon: null, danger: true },
+                ].map(({ label, danger }) => (
                   <button
                     key={label}
                     onClick={() => setShowMenu(false)}
-                    className="w-full text-left px-4 py-3 text-sm font-medium text-ink-700 hover:bg-paper-200 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800/50 dark:hover:text-paper-50 transition-all duration-200"
+                    className={`w-full text-left px-4 py-2.5 text-[14px] font-medium transition-colors
+                      ${danger 
+                        ? "text-[#FF5C6B] hover:bg-[#FF5C6B]/10" 
+                        : "text-[#18192A] dark:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636]"
+                      }`}
                   >
                     {label}
                   </button>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Send, Paperclip, X, Reply } from "lucide-react";
+import { Send, Paperclip, X, Reply, Mic } from "lucide-react";
 import VoiceRecorder from "./VoiceRecorder";
 import { useTyping } from "../../hooks/useTyping";
 import { messageApi } from "../../api/messageApi";
@@ -21,7 +21,6 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
   const handleTextChange = (e) => {
     setText(e.target.value);
     startTyping();
-    // Auto-grow textarea
     const ta = textareaRef.current;
     if (ta) { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight, 120) + "px"; }
   };
@@ -103,21 +102,21 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
   }));
 
   return (
-    <div className="shrink-0 border-t border-paper-200 dark:border-ink-800/50 bg-paper-100/80 dark:bg-ink-900/40 backdrop-blur-md transition-colors duration-300">
+    <div className="shrink-0 border-t border-[#E9E6DF] dark:border-[#2A2F45] bg-[#FFFFFF]/80 dark:bg-[#111318]/80 backdrop-blur-xl transition-colors duration-300 relative z-20">
       {/* Smart Replies */}
       <SmartReplyChips messages={lastMessages} onSelect={(reply) => setText(reply)} />
 
       {/* Reply preview */}
       {replyTo && (
-        <div className="flex items-center gap-3 px-4 py-2.5 border-b border-paper-200 dark:border-ink-800/50 bg-violet-500/10">
-          <Reply size={16} className="text-violet-500 dark:text-violet-400 shrink-0" />
+        <div className="flex items-center gap-3 px-5 py-3 border-b border-[#E9E6DF] dark:border-[#2A2F45] bg-[#7C5CFF]/5">
+          <div className="w-1 h-10 bg-[#7C5CFF] rounded-full shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-violet-600 dark:text-violet-400 font-bold">
+            <p className="text-xs text-[#7C5CFF] font-bold">
               Replying to {replyTo.sender?.displayName || "message"}
             </p>
-            <p className="text-xs text-ink-500 truncate font-medium">{replyTo.content || "[media]"}</p>
+            <p className="text-xs text-[#5A6080] dark:text-[#9AA0B8] truncate font-medium mt-0.5">{replyTo.content || "[media]"}</p>
           </div>
-          <button onClick={onCancelReply} className="text-ink-400 hover:text-ink-900 dark:hover:text-paper-50 transition-colors p-1 rounded-lg hover:bg-paper-200 dark:hover:bg-ink-800/50">
+          <button onClick={onCancelReply} className="text-[#9AA0B8] hover:text-[#FF5C6B] hover:bg-[#FF5C6B]/10 transition-colors p-1.5 rounded-xl shrink-0">
             <X size={16} />
           </button>
         </div>
@@ -125,23 +124,23 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
 
       {/* File preview */}
       {file && (
-        <div className="flex items-center gap-3 px-4 py-2.5 border-b border-paper-200 dark:border-ink-800/50 bg-violet-500/5">
+        <div className="flex items-center gap-3 px-5 py-3 border-b border-[#E9E6DF] dark:border-[#2A2F45] bg-[#7C5CFF]/5">
           {filePreview ? (
-            <img src={filePreview} alt="preview" className="w-12 h-12 rounded-xl object-cover ring-2 ring-violet-500/30 shadow-lg" />
+            <img src={filePreview} alt="preview" className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#7C5CFF]/30 shadow-md" />
           ) : (
-            <div className="w-12 h-12 rounded-xl bg-paper-200 dark:bg-ink-800 border border-paper-300 dark:border-ink-700 flex items-center justify-center shadow-sm">
-              <Paperclip size={16} className="text-violet-500 dark:text-violet-400" />
+            <div className="w-12 h-12 rounded-xl bg-[#F5F3EF] dark:bg-[#1A1D27] border border-[#E9E6DF] dark:border-[#2A2F45] flex items-center justify-center shadow-sm">
+              <Paperclip size={18} className="text-[#7C5CFF]" />
             </div>
           )}
-          <span className="text-sm text-ink-900 dark:text-paper-50 flex-1 truncate font-medium">{file.name}</span>
-          <button onClick={clearFile} className="text-ink-400 hover:text-rose-500 transition-colors p-1.5 rounded-lg hover:bg-rose-500/10">
+          <span className="text-sm text-[#18192A] dark:text-[#F0EEEA] flex-1 truncate font-medium">{file.name}</span>
+          <button onClick={clearFile} className="text-[#9AA0B8] hover:text-[#FF5C6B] hover:bg-[#FF5C6B]/10 transition-colors p-1.5 rounded-xl shrink-0">
             <X size={16} />
           </button>
         </div>
       )}
 
       {/* Input row */}
-      <div className="flex items-end gap-2.5 px-4 py-4">
+      <div className="flex items-end gap-3 px-4 py-4">
         {/* File attach */}
         <input
           ref={fileInputRef}
@@ -155,28 +154,28 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
           type="button"
           onClick={() => fileInputRef.current?.click()}
           id="attach-file-btn"
-          className="p-2.5 rounded-xl text-ink-500 hover:text-violet-600 dark:text-ink-400 dark:hover:text-violet-400 hover:bg-violet-500/10 dark:hover:bg-violet-500/20 transition-all duration-200 shrink-0 shadow-sm"
+          className="w-11 h-11 flex items-center justify-center rounded-[18px] text-[#9AA0B8] hover:text-[#7C5CFF] hover:bg-[#7C5CFF]/10 transition-all duration-200 shrink-0"
         >
-          <Paperclip size={20} />
+          <Paperclip size={22} strokeWidth={2.5} />
         </button>
 
         {/* Text area or Voice recorder */}
         {showVoice ? (
-          <div className="flex-1">
+          <div className="flex-1 bg-[#F5F3EF] dark:bg-[#1A1D27] rounded-[22px] py-1 border border-transparent shadow-sm">
             <VoiceRecorder onSend={handleVoiceSend} onCancel={() => setShowVoice(false)} />
           </div>
         ) : (
-          <div className="flex-1 relative">
+          <div className="flex-1 relative group">
             <textarea
               ref={textareaRef}
               id="message-input"
-              placeholder="Type a message…"
+              placeholder="Message..."
               value={text}
               onChange={handleTextChange}
               onKeyDown={handleKeyDown}
               rows={1}
-              className="w-full resize-none bg-white dark:bg-ink-800/60 border border-paper-200 dark:border-ink-700/50 rounded-2xl px-4 py-3 text-sm text-ink-900 dark:text-paper-50 placeholder-ink-400 dark:placeholder-ink-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 outline-none transition-all shadow-sm scrollbar-thin"
-              style={{ maxHeight: "120px", overflowY: "auto" }}
+              className="w-full resize-none bg-[#F5F3EF] dark:bg-[#1A1D27] border border-transparent rounded-[22px] px-5 py-3 text-[15px] text-[#18192A] dark:text-[#F0EEEA] placeholder-[#9AA0B8] dark:placeholder-[#5B6180] focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/20 focus:bg-white dark:focus:bg-[#1A1D27] outline-none transition-all duration-200 shadow-sm scrollbar-thin"
+              style={{ maxHeight: "120px", overflowY: "auto", minHeight: "48px" }}
             />
           </div>
         )}
@@ -187,9 +186,9 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
             type="button"
             onClick={() => setShowVoice(true)}
             id="voice-toggle-btn"
-            className="p-2.5 rounded-xl text-ink-500 hover:text-violet-600 dark:text-ink-400 dark:hover:text-violet-400 hover:bg-violet-500/10 dark:hover:bg-violet-500/20 transition-all duration-200 shrink-0 shadow-sm"
+            className="w-11 h-11 flex items-center justify-center rounded-[18px] text-[#9AA0B8] hover:text-[#7C5CFF] hover:bg-[#7C5CFF]/10 transition-all duration-200 shrink-0"
           >
-            <span className="text-xl">🎤</span>
+            <Mic size={22} strokeWidth={2.5} />
           </button>
         )}
 
@@ -200,9 +199,9 @@ export default function MessageInput({ chatId, chatType, replyTo, onCancelReply 
             id="send-message-btn"
             onClick={handleSend}
             disabled={sending}
-            className="p-3 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white transition-all duration-200 disabled:opacity-50 shadow-xl shadow-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/50 shrink-0 hover:scale-105 active:scale-95"
+            className="w-12 h-12 flex items-center justify-center rounded-[20px] bg-gradient-to-br from-[#7C5CFF] to-[#FF5CAA] text-white hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 shadow-lg shadow-[#7C5CFF]/30 shrink-0 animate-scale-in"
           >
-            <Send size={18} />
+            <Send size={18} strokeWidth={2.5} className="ml-1" />
           </button>
         )}
       </div>

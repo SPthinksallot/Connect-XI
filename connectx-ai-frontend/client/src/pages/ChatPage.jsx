@@ -11,7 +11,7 @@ import useAuthStore from "../store/useAuthStore";
 import { Navigate } from "react-router-dom";
 
 export default function ChatPage() {
-  const { isAuthenticated, user, fetchMe } = useAuthStore();
+  const { isAuthenticated, fetchMe } = useAuthStore();
   const { activeChatId, fetchChats } = useChatStore();
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   
@@ -31,19 +31,27 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen w-full bg-paper-50 dark:bg-ink-950 text-ink-900 dark:text-paper-50 overflow-hidden font-body transition-colors duration-300">
-      {/* App Sidebar (Nav) */}
+    <div className="flex h-[100dvh] w-full overflow-hidden bg-[#F5F3EF] dark:bg-[#0A0B10] transition-colors duration-300">
+      {/* ── App Sidebar (Nav) ── */}
       <Sidebar />
 
-      {/* Bento Grid Layout */}
-      <div className="flex-1 p-3 gap-3 grid grid-cols-12 grid-rows-12">
-        {/* Chat List - Left Bento Box */}
-        <div className={`col-span-12 md:col-span-4 lg:col-span-3 row-span-12 bg-white/80 dark:bg-ink-900/50 backdrop-blur-xl border border-paper-200 dark:border-ink-800/50 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 ${activeChatId ? "hidden md:flex" : "flex"} flex-col`}>
+      {/* ── Main Content Area ── */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Panel: Chat List */}
+        <div className={`
+          flex-col w-full md:w-[360px] lg:w-[400px] shrink-0 border-r border-[#D8D3C6] dark:border-[#2A2F45] bg-[#FFFFFF] dark:bg-[#111318]
+          transition-all duration-300
+          ${activeChatId ? "hidden md:flex" : "flex"}
+        `}>
           <ChatList onCreateGroup={() => setShowCreateGroup(true)} />
         </div>
 
-        {/* Chat Window - Right Bento Box */}
-        <div className={`col-span-12 md:col-span-8 lg:col-span-9 row-span-12 bg-white/90 dark:bg-ink-900/30 backdrop-blur-xl border border-paper-200 dark:border-ink-800/50 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 ${!activeChatId ? "hidden md:flex" : "flex"} flex-col`}>
+        {/* Right Panel: Chat Window / Empty State */}
+        <div className={`
+          flex-1 flex-col bg-[#F7F6F4] dark:bg-[#111318]/50
+          transition-all duration-300
+          ${!activeChatId ? "hidden md:flex" : "flex"}
+        `}>
           {activeChatId ? (
             <ChatWindow />
           ) : (
@@ -53,7 +61,7 @@ export default function ChatPage() {
       </div>
 
       {showCreateGroup && (
-          <CreateGroupModal isOpen={true} onClose={() => setShowCreateGroup(false)} />
+        <CreateGroupModal isOpen={true} onClose={() => setShowCreateGroup(false)} />
       )}
     </div>
   );

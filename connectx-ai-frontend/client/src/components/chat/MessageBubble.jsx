@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { formatMessageTime } from "../../utils/formatTime";
-import { CheckCheck, Check, Clock, Trash2, Reply, MoreHorizontal } from "lucide-react";
+import { CheckCheck, Clock, Trash2, Reply } from "lucide-react";
 import MediaPreview from "./MediaPreview";
 import TranslateToggle from "../ai/TranslateToggle";
 import Avatar from "../common/Avatar";
 
 const STATUS_ICON = {
-  sent: <Clock size={11} className="text-ink-500" />,
-  delivered: <CheckCheck size={11} className="text-ink-400" />,
-  read: <CheckCheck size={11} className="text-violet-400" />,
+  sent: <Clock size={11} className="text-white/70" />,
+  delivered: <CheckCheck size={11} className="text-white/80" />,
+  read: <CheckCheck size={11} className="text-white" />,
 };
 
 const EMOJI_REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
@@ -21,9 +21,10 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
 
   if (isDeleted) {
     return (
-      <div className={`flex ${isMine ? "justify-end" : "justify-start"} px-4`}>
-        <div className="italic text-xs text-ink-500 px-3 py-2 bg-paper-100 dark:bg-ink-800/50 rounded-xl border border-paper-200 dark:border-ink-700/50">
-          🗑 Message deleted
+      <div className={`flex ${isMine ? "justify-end" : "justify-start"} px-4 mb-2`}>
+        <div className="italic text-xs text-[#9AA0B8] dark:text-[#5B6180] px-4 py-2.5 bg-[#F5F3EF] dark:bg-[#1A1D27]/50 rounded-2xl border border-[#D8D3C6] dark:border-[#2A2F45]/50 flex items-center gap-2">
+          <Trash2 size={12} />
+          Message deleted
         </div>
       </div>
     );
@@ -33,37 +34,37 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
 
   return (
     <div
-      className={`flex items-end gap-2 px-4 group ${isMine ? "flex-row-reverse" : "flex-row"}`}
+      className={`flex items-end gap-2 px-4 group mb-2 animate-fade-in ${isMine ? "flex-row-reverse" : "flex-row"}`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => { setShowActions(false); setShowEmojiPicker(false); }}
     >
       {/* Avatar (others only) */}
       {!isMine && (
         <div className="w-7 shrink-0 mb-1">
-          {showAvatar && <Avatar name={senderName} src={sender?.avatar} size="xs" />}
+          {showAvatar ? <Avatar name={senderName} src={sender?.avatar} size="xs" /> : <div className="w-7" />}
         </div>
       )}
 
-      <div className={`flex flex-col max-w-[72%] ${isMine ? "items-end" : "items-start"}`}>
+      <div className={`flex flex-col max-w-[75%] md:max-w-[65%] ${isMine ? "items-end" : "items-start"}`}>
         {/* Sender name (groups) */}
         {!isMine && showAvatar && (
-          <span className="text-xs text-violet-400 font-medium ml-1 mb-0.5">{senderName}</span>
+          <span className="text-[11px] text-[#7C5CFF] font-semibold ml-1 mb-1 tracking-wide">{senderName}</span>
         )}
 
         {/* Reply-to preview */}
         {replyTo && (
-          <div className={`flex items-start gap-2 px-3 py-2 mb-1 rounded-lg border-l-2 border-violet-500 bg-paper-100 dark:bg-ink-700/50 text-xs text-ink-500 max-w-full ${isMine ? "self-end" : "self-start"}`}>
-            <Reply size={12} className="text-violet-500 shrink-0 mt-0.5" />
-            <span className="truncate">{replyTo.content || "[media]"}</span>
+          <div className={`flex items-start gap-2 px-3 py-2 mb-1.5 rounded-xl border-l-4 border-[#7C5CFF] bg-[#F5F3EF] dark:bg-[#1A1D27] text-xs max-w-full relative opacity-90 ${isMine ? "self-end" : "self-start"}`}>
+            <Reply size={12} className="text-[#7C5CFF] shrink-0 mt-0.5" />
+            <span className="truncate text-[#5A6080] dark:text-[#9AA0B8]">{replyTo.content || "[media]"}</span>
           </div>
         )}
 
         {/* Bubble */}
         <div
-          className={`relative px-3 py-2 shadow-sm
+          className={`relative px-4 py-2.5 shadow-sm
             ${isMine
-              ? "bg-gradient-to-br from-violet-600 to-violet-700 text-white rounded-2xl rounded-tr-md rounded-br-sm"
-              : "bg-white dark:bg-ink-800 border border-paper-200 dark:border-ink-700 text-ink-900 dark:text-paper-50 rounded-2xl rounded-tl-md rounded-bl-sm"
+              ? "bg-gradient-to-br from-[#7C5CFF] to-[#6645F0] text-white rounded-[20px] rounded-br-[4px]"
+              : "bg-white dark:bg-[#1A1D27] border border-[#E9E6DF] dark:border-[#2A2F45] text-[#18192A] dark:text-[#F0EEEA] rounded-[20px] rounded-bl-[4px]"
             }`}
         >
           {/* Media */}
@@ -71,14 +72,14 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
 
           {/* Text content */}
           {content && (
-            <p className={`text-sm leading-relaxed whitespace-pre-wrap break-words ${isMine ? "text-white" : "text-ink-900 dark:text-paper-50"}`}>
+            <p className={`text-[15px] leading-[1.4] whitespace-pre-wrap break-words ${isMine ? "text-white" : "text-[#18192A] dark:text-[#F0EEEA]"}`}>
               {content}
             </p>
           )}
 
           {/* Voice transcription */}
           {voiceText && !content && (
-            <p className="text-sm italic text-ink-300">🎤 "{voiceText}"</p>
+            <p className={`text-[15px] italic leading-[1.4] ${isMine ? "text-white/80" : "text-[#5A6080] dark:text-[#9AA0B8]"}`}>🎤 "{voiceText}"</p>
           )}
 
           {/* Translate toggle */}
@@ -91,8 +92,8 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
           )}
 
           {/* Timestamp + status */}
-          <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : "justify-start"}`}>
-            <span className={`text-[10px] ${isMine ? "text-white/60" : "text-ink-400 dark:text-ink-500"}`}>
+          <div className={`flex items-center gap-1.5 mt-1.5 ${isMine ? "justify-end" : "justify-start"}`}>
+            <span className={`text-[10px] font-medium ${isMine ? "text-white/70" : "text-[#9AA0B8] dark:text-[#5B6180]"}`}>
               {formatMessageTime(createdAt)}
             </span>
             {isMine && STATUS_ICON[status]}
@@ -111,9 +112,10 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
               <button
                 key={emoji}
                 onClick={() => onReact?.(message._id, emoji)}
-                className="flex items-center gap-0.5 px-1.5 py-0.5 bg-paper-100 dark:bg-ink-800 border border-paper-200 dark:border-ink-700 rounded-full text-xs hover:bg-paper-200 dark:hover:bg-ink-700 transition-colors"
+                className="flex items-center gap-1 px-2 py-0.5 bg-white dark:bg-[#111318] border border-[#E9E6DF] dark:border-[#2A2F45] rounded-full text-xs shadow-sm hover:scale-105 active:scale-95 transition-all"
               >
-                {emoji} {count > 1 && <span className="text-ink-500 font-medium">{count}</span>}
+                <span>{emoji}</span>
+                {count > 1 && <span className="text-[#5A6080] dark:text-[#9AA0B8] font-bold text-[10px]">{count}</span>}
               </button>
             ))}
           </div>
@@ -122,21 +124,22 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
 
       {/* Hover actions */}
       {showActions && (
-        <div className={`flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity mb-2 ${isMine ? "flex-row-reverse" : "flex-row"}`}>
+        <div className={`flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity mb-2 ${isMine ? "flex-row-reverse" : "flex-row"}`}>
           <div className="relative">
             <button
               onClick={() => setShowEmojiPicker((s) => !s)}
-              className="p-1.5 rounded-lg text-ink-400 hover:text-ink-900 hover:bg-paper-200 dark:hover:text-paper-50 dark:hover:bg-ink-700 transition-colors text-base"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-lg hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-colors"
+              title="React"
             >
               😊
             </button>
             {showEmojiPicker && (
-              <div className={`absolute bottom-full mb-1 flex gap-1 p-2 bg-white dark:bg-ink-800 border border-paper-200 dark:border-ink-700 rounded-xl shadow-xl z-20 ${isMine ? "right-0" : "left-0"}`}>
+              <div className={`absolute bottom-full mb-2 flex gap-1 p-2 bg-white dark:bg-[#1A1D27] border border-[#E9E6DF] dark:border-[#2A2F45] rounded-2xl shadow-xl shadow-black/10 z-20 animate-scale-in origin-bottom ${isMine ? "right-0" : "left-0"}`}>
                 {EMOJI_REACTIONS.map((emoji) => (
                   <button
                     key={emoji}
                     onClick={() => { onReact?.(message._id, emoji); setShowEmojiPicker(false); }}
-                    className="text-lg hover:scale-125 transition-transform"
+                    className="w-8 h-8 flex items-center justify-center text-xl hover:scale-125 transition-transform origin-bottom"
                   >
                     {emoji}
                   </button>
@@ -146,16 +149,18 @@ export default function MessageBubble({ message, isMine, showAvatar, onDelete, o
           </div>
           <button
             onClick={() => onReply?.(message)}
-            className="p-1.5 rounded-lg text-ink-400 hover:text-ink-900 hover:bg-paper-200 dark:hover:text-paper-50 dark:hover:bg-ink-700 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-full text-[#9AA0B8] hover:text-[#18192A] dark:hover:text-[#F0EEEA] hover:bg-[#F5F3EF] dark:hover:bg-[#222636] transition-colors"
+            title="Reply"
           >
-            <Reply size={14} />
+            <Reply size={15} />
           </button>
           {isMine && (
             <button
               onClick={() => onDelete?.(message._id)}
-              className="p-1.5 rounded-lg text-ink-400 hover:text-coral-500 hover:bg-coral-500/10 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-[#9AA0B8] hover:text-[#FF5C6B] hover:bg-[#FF5C6B]/10 transition-colors"
+              title="Delete"
             >
-              <Trash2 size={14} />
+              <Trash2 size={15} />
             </button>
           )}
         </div>

@@ -5,16 +5,15 @@ import { CheckCheck, Check, Image, Mic, FileText, Video } from "lucide-react";
 import useChatStore from "../../store/useChatStore";
 
 const MediaIcon = ({ type }) => {
-  if (type === "image") return <Image size={12} />;
-  if (type === "audio") return <Mic size={12} />;
-  if (type === "video") return <Video size={12} />;
-  return <FileText size={12} />;
+  if (type === "image") return <Image size={13} />;
+  if (type === "audio") return <Mic size={13} />;
+  if (type === "video") return <Video size={13} />;
+  return <FileText size={13} />;
 };
 
 export default function ChatListItem({ chat, isActive, onSelect, currentUserId }) {
   const { onlineUserIds } = useChatStore();
 
-  // Resolve the "other" participant for DMs or group info
   const isGroup = chat.chatType === "Group" || chat.isGroup;
   const other = isGroup
     ? null
@@ -40,14 +39,19 @@ export default function ChatListItem({ chat, isActive, onSelect, currentUserId }
     }
   }
 
+  // Sender prefix for groups
+  const senderPrefix = isGroup && lastMsg && lastMsg.sender !== currentUserId && !lastMsg.isDeleted
+    ? (lastMsg.sender?.displayName || lastMsg.sender?.username || "").split(" ")[0] + ": "
+    : "";
+
   return (
     <button
       id={`chat-item-${chat._id}`}
       onClick={() => onSelect(chat._id, isGroup ? "Group" : "Chat")}
-      className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-200 text-left group
+      className={`w-full flex items-center gap-3.5 px-3 py-3 rounded-2xl transition-all duration-200 text-left group
         ${isActive
-          ? "bg-violet-500/10 dark:bg-violet-500/20 ring-2 ring-violet-500/40 shadow-lg shadow-violet-500/10"
-          : "hover:bg-paper-200 dark:hover:bg-ink-800/40"
+          ? "bg-[#7C5CFF]/10 dark:bg-[#7C5CFF]/20 ring-1 ring-[#7C5CFF]/30 shadow-md shadow-[#7C5CFF]/5"
+          : "hover:bg-[#F5F3EF] dark:hover:bg-[#1A1D27]"
         }`}
     >
       <Avatar
@@ -58,22 +62,30 @@ export default function ChatListItem({ chat, isActive, onSelect, currentUserId }
       />
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <span className={`font-semibold truncate text-base ${isActive ? "text-violet-600 dark:text-violet-300" : "text-ink-900 dark:text-paper-50 group-hover:text-ink-950 dark:group-hover:text-white"}`}>
-            {name || "Unknown User"}
+        <div className="flex items-center justify-between mb-0.5">
+          <span className={`font-semibold truncate text-[15px] transition-colors
+            ${isActive
+              ? "text-[#7C5CFF] dark:text-[#9B8FFF]"
+              : "text-[#18192A] dark:text-[#F0EEEA] group-hover:text-black dark:group-hover:text-white"
+            }`}>
+            {name || "Unknown"}
           </span>
-          <span className="text-xs text-ink-500 shrink-0 ml-2 font-medium">
+          <span className={`text-[11px] font-medium shrink-0 ml-2 transition-colors
+            ${unread > 0 ? "text-[#7C5CFF]" : "text-[#9AA0B8] dark:text-[#5B6180]"}`}>
             {lastMsg ? formatChatTime(lastMsg.createdAt) : ""}
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 text-sm text-ink-500 truncate">
-            {previewIcon && <span className="text-ink-400">{previewIcon}</span>}
-            <span className="truncate">{preview || "Start chatting"}</span>
+          <div className="flex items-center gap-1.5 text-[13px] truncate">
+            {previewIcon && <span className="text-[#9AA0B8] dark:text-[#5B6180]">{previewIcon}</span>}
+            <span className={`truncate ${unread > 0 ? "text-[#18192A] dark:text-[#F0EEEA] font-medium" : "text-[#9AA0B8] dark:text-[#5B6180]"}`}>
+              {senderPrefix && <span className="opacity-75 font-medium">{senderPrefix}</span>}
+              {preview || "Start chatting"}
+            </span>
           </div>
           {unread > 0 && (
-            <span className="shrink-0 min-w-[22px] h-5 px-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30">
+            <span className="shrink-0 min-w-[20px] h-5 px-1.5 bg-gradient-to-r from-[#7C5CFF] to-[#FF5CAA] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md shadow-[#7C5CFF]/30 animate-scale-in">
               {unread > 99 ? "99+" : unread}
             </span>
           )}

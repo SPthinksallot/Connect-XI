@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, Zap, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, AtSign } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import Spinner from "../common/Spinner";
 
@@ -25,75 +25,126 @@ export default function RegisterForm({ onSwitchToLogin }) {
   };
 
   const displayError = localError || error;
+  const strength = form.password.length === 0 ? 0
+    : form.password.length < 6 ? 1
+    : form.password.length < 10 ? 2
+    : 3;
+  const strengthColors = ["", "#FF5C6B", "#FFB347", "#22D3A0"];
+  const strengthLabels = ["", "Weak", "Fair", "Strong"];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {/* Display Name */}
-      <div className="relative">
-        <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400" />
-        <input
-          name="displayName"
-          placeholder="Display name"
-          value={form.displayName}
-          onChange={handleChange}
-          className="w-full pl-10 pr-4 py-3 bg-white dark:bg-ink-700 border border-paper-200 dark:border-ink-600 rounded-xl text-ink-900 dark:text-paper-50 placeholder-ink-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition-all shadow-sm"
-        />
+      <div className="space-y-1.5">
+        <label className="block text-xs font-semibold text-[#5A6080] dark:text-[#9AA0B8] uppercase tracking-wider">
+          Display Name
+        </label>
+        <div className="relative">
+          <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9AA0B8] dark:text-[#5B6180] pointer-events-none" />
+          <input
+            name="displayName"
+            placeholder="Jane Smith"
+            value={form.displayName}
+            onChange={handleChange}
+            className="input-base pl-10"
+            autoComplete="name"
+          />
+        </div>
       </div>
 
       {/* Username */}
-      <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400 text-sm font-medium">@</span>
-        <input
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          required
-          autoComplete="username"
-          className="w-full pl-8 pr-4 py-3 bg-white dark:bg-ink-700 border border-paper-200 dark:border-ink-600 rounded-xl text-ink-900 dark:text-paper-50 placeholder-ink-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition-all shadow-sm"
-        />
+      <div className="space-y-1.5">
+        <label className="block text-xs font-semibold text-[#5A6080] dark:text-[#9AA0B8] uppercase tracking-wider">
+          Username
+        </label>
+        <div className="relative">
+          <AtSign size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9AA0B8] dark:text-[#5B6180] pointer-events-none" />
+          <input
+            name="username"
+            placeholder="janesmith"
+            value={form.username}
+            onChange={handleChange}
+            required
+            autoComplete="username"
+            className="input-base pl-10"
+          />
+        </div>
       </div>
 
       {/* Email */}
-      <div className="relative">
-        <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400" />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email address"
-          value={form.email}
-          onChange={handleChange}
-          required
-          autoComplete="email"
-          className="w-full pl-10 pr-4 py-3 bg-white dark:bg-ink-700 border border-paper-200 dark:border-ink-600 rounded-xl text-ink-900 dark:text-paper-50 placeholder-ink-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition-all shadow-sm"
-        />
+      <div className="space-y-1.5">
+        <label className="block text-xs font-semibold text-[#5A6080] dark:text-[#9AA0B8] uppercase tracking-wider">
+          Email
+        </label>
+        <div className="relative">
+          <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9AA0B8] dark:text-[#5B6180] pointer-events-none" />
+          <input
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={form.email}
+            onChange={handleChange}
+            required
+            autoComplete="email"
+            className="input-base pl-10"
+          />
+        </div>
       </div>
 
       {/* Password */}
-      <div className="relative">
-        <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400" />
-        <input
-          name="password"
-          type={showPass ? "text" : "password"}
-          placeholder="Password (min. 6 chars)"
-          value={form.password}
-          onChange={handleChange}
-          required
-          autoComplete="new-password"
-          className="w-full pl-10 pr-12 py-3 bg-white dark:bg-ink-700 border border-paper-200 dark:border-ink-600 rounded-xl text-ink-900 dark:text-paper-50 placeholder-ink-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition-all shadow-sm"
-        />
-        <button
-          type="button"
-          onClick={() => setShowPass((s) => !s)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-600 dark:hover:text-paper-50 transition-colors"
-        >
-          {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
+      <div className="space-y-1.5">
+        <label className="block text-xs font-semibold text-[#5A6080] dark:text-[#9AA0B8] uppercase tracking-wider">
+          Password
+        </label>
+        <div className="relative">
+          <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9AA0B8] dark:text-[#5B6180] pointer-events-none" />
+          <input
+            name="password"
+            type={showPass ? "text" : "password"}
+            placeholder="Min. 6 characters"
+            value={form.password}
+            onChange={handleChange}
+            required
+            autoComplete="new-password"
+            className="input-base pl-10 pr-11"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPass((s) => !s)}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9AA0B8] hover:text-[#5A6080] dark:hover:text-[#F0EEEA] transition-colors p-0.5"
+            aria-label={showPass ? "Hide password" : "Show password"}
+          >
+            {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+          </button>
+        </div>
+
+        {/* Password strength */}
+        {form.password.length > 0 && (
+          <div className="flex items-center gap-2 mt-1">
+            <div className="flex gap-1 flex-1">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-1 flex-1 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor: strength >= i ? strengthColors[strength] : "#E9E6DF",
+                  }}
+                />
+              ))}
+            </div>
+            <span className="text-xs font-medium" style={{ color: strengthColors[strength] }}>
+              {strengthLabels[strength]}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Error */}
       {displayError && (
-        <p className="text-coral-500 text-sm bg-coral-500/10 px-3 py-2 rounded-lg">{displayError}</p>
+        <div className="flex items-center gap-2 px-3 py-2.5 bg-[#FF5C6B]/8 border border-[#FF5C6B]/20 rounded-xl">
+          <AlertCircle size={14} className="text-[#FF5C6B] shrink-0" />
+          <p className="text-sm text-[#FF5C6B]">{displayError}</p>
+        </div>
       )}
 
       {/* Submit */}
@@ -101,24 +152,10 @@ export default function RegisterForm({ onSwitchToLogin }) {
         type="submit"
         disabled={loading}
         id="register-submit-btn"
-        className="w-full py-3 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-violet-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="btn-primary w-full rounded-2xl py-3 mt-2 text-base"
       >
-        {loading ? <Spinner size="sm" /> : (
-          <><Zap size={16} /> Create Account <ArrowRight size={16} /></>
-        )}
+        {loading ? <Spinner size="sm" /> : "Create Account"}
       </button>
-
-      {/* Switch */}
-      <p className="text-center text-sm text-ink-400">
-        Already have an account?{" "}
-        <button
-          type="button"
-          onClick={onSwitchToLogin}
-          className="text-violet-400 hover:text-violet-300 font-medium transition-colors"
-        >
-          Sign in
-        </button>
-      </p>
     </form>
   );
 }

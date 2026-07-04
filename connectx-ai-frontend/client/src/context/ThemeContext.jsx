@@ -2,9 +2,18 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext(null);
 
+const STORAGE_KEY = "yaap-theme";
+
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    const stored = window.localStorage?.getItem("connectx-theme");
+    // Migrate old key if present
+    const legacy = window.localStorage?.getItem("connectx-theme");
+    if (legacy) {
+      window.localStorage.removeItem("connectx-theme");
+      window.localStorage.setItem(STORAGE_KEY, legacy);
+      return legacy;
+    }
+    const stored = window.localStorage?.getItem(STORAGE_KEY);
     if (stored) return stored;
     return window.matchMedia?.("(prefers-color-scheme: dark)").matches
       ? "dark"
@@ -18,16 +27,11 @@ export function ThemeProvider({ children }) {
     } else {
       root.classList.remove("dark");
     }
-    window.localStorage?.setItem("connectx-theme", theme);
+    window.localStorage?.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((t) => {
-      const newTheme = t === "dark" ? "light" : "dark";
-      console.log(`🎨 Theme switched: ${t} → ${newTheme}`);
-      return newTheme;
-    });
-  };
+  const toggleTheme = () =>
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>

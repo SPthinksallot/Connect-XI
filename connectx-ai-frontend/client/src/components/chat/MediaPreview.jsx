@@ -11,30 +11,30 @@ export default function MediaPreview({ mediaUrl, mediaType, mediaName, className
     return (
       <>
         <div
-          className={`relative group rounded-xl overflow-hidden cursor-pointer max-w-xs ${className}`}
+          className={`relative group rounded-xl overflow-hidden cursor-pointer max-w-[280px] sm:max-w-xs shadow-sm ring-1 ring-black/5 dark:ring-white/10 ${className}`}
           onClick={() => setZoomed(true)}
         >
           <img
             src={mediaUrl}
             alt={mediaName || "Image"}
-            className="w-full max-h-64 object-cover rounded-xl"
+            className="w-full max-h-64 object-cover rounded-xl bg-black/5 dark:bg-white/5"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <ZoomIn size={24} className="text-white" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-[1px]">
+            <ZoomIn size={24} className="text-white drop-shadow-md" />
           </div>
         </div>
 
         {/* Lightbox */}
         {zoomed && (
           <div
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
             onClick={() => setZoomed(false)}
           >
-            <button className="absolute top-4 right-4 p-2 text-white/70 hover:text-white">
-              <X size={24} />
+            <button className="absolute top-4 right-4 md:top-6 md:right-6 p-2.5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-sm">
+              <X size={20} />
             </button>
-            <img src={mediaUrl} alt={mediaName} className="max-w-full max-h-full object-contain rounded-xl" />
+            <img src={mediaUrl} alt={mediaName} className="max-w-full max-h-[90vh] object-contain rounded-lg animate-scale-in shadow-2xl" />
           </div>
         )}
       </>
@@ -43,8 +43,8 @@ export default function MediaPreview({ mediaUrl, mediaType, mediaName, className
 
   if (mediaType === "video") {
     return (
-      <div className={`rounded-xl overflow-hidden max-w-xs ${className}`}>
-        <video controls className="w-full max-h-64 rounded-xl bg-black" src={mediaUrl}>
+      <div className={`rounded-xl overflow-hidden max-w-[280px] sm:max-w-xs shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-black ${className}`}>
+        <video controls className="w-full max-h-64 rounded-xl" src={mediaUrl}>
           Your browser does not support video.
         </video>
       </div>
@@ -53,11 +53,8 @@ export default function MediaPreview({ mediaUrl, mediaType, mediaName, className
 
   if (mediaType === "audio") {
     return (
-      <div className={`flex items-center gap-3 p-3 bg-ink-700/50 rounded-xl min-w-[200px] max-w-xs ${className}`}>
-        <div className="w-8 h-8 rounded-full bg-violet-600/20 flex items-center justify-center shrink-0">
-          <Play size={14} className="text-violet-400" />
-        </div>
-        <audio controls className="flex-1 h-8" src={mediaUrl} />
+      <div className={`flex items-center gap-3 p-2 bg-black/5 dark:bg-white/10 border border-black/5 dark:border-white/5 rounded-2xl min-w-[200px] max-w-xs backdrop-blur-sm ${className}`}>
+        <audio controls className="w-full h-9 outline-none" src={mediaUrl} />
       </div>
     );
   }
@@ -68,16 +65,16 @@ export default function MediaPreview({ mediaUrl, mediaType, mediaName, className
       href={mediaUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`flex items-center gap-3 p-3 bg-ink-700/50 hover:bg-ink-600/50 rounded-xl transition-colors max-w-xs ${className}`}
+      className={`flex items-center gap-3 p-3 bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 border border-black/5 dark:border-white/5 rounded-2xl transition-colors max-w-[260px] sm:max-w-xs backdrop-blur-sm group ${className}`}
     >
-      <div className="w-9 h-9 rounded-xl bg-violet-600/20 flex items-center justify-center shrink-0">
-        <FileText size={16} className="text-violet-400" />
+      <div className="w-10 h-10 rounded-[14px] bg-[#7C5CFF]/15 flex items-center justify-center shrink-0 text-[#7C5CFF] group-hover:scale-105 transition-transform">
+        <FileText size={18} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-paper-50 truncate">{mediaName || "File"}</p>
-        <p className="text-xs text-ink-400">Click to open</p>
+        <p className="text-[13px] font-semibold text-current truncate leading-tight">{mediaName || "Attachment"}</p>
+        <p className="text-[11px] opacity-70 mt-0.5 uppercase tracking-wide font-medium">Click to open</p>
       </div>
-      <Download size={15} className="text-ink-400 shrink-0" />
+      <Download size={16} className="opacity-50 group-hover:opacity-100 shrink-0 transition-opacity" />
     </a>
   );
 }

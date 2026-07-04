@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Mic, Square, X, Loader } from "lucide-react";
 import { useVoiceRecorder } from "../../hooks/useVoiceRecorder";
 import { formatDuration } from "../../utils/formatTime";
@@ -7,67 +7,58 @@ export default function VoiceRecorder({ onSend, onCancel }) {
   const { isRecording, duration, transcript, error, startRecording, stopRecording, cancelRecording } =
     useVoiceRecorder({
       onAudioBlob: (blob) => {
-        // Pass blob + transcript back to MessageInput for upload
         onSend?.(blob, transcript);
       },
     });
 
-  const handleStop = () => {
-    stopRecording();
-  };
+  useEffect(() => {
+    // Auto-start recording when mounted
+    if (!isRecording) startRecording();
+  }, [isRecording, startRecording]);
+
+  const handleStop = () => stopRecording();
 
   const handleCancel = () => {
     cancelRecording();
     onCancel?.();
   };
 
-  if (!isRecording) {
-    return (
-      <button
-        id="voice-record-btn"
-        type="button"
-        onClick={startRecording}
-        className="p-2 rounded-xl text-ink-400 hover:text-violet-400 hover:bg-violet-600/10 transition-all"
-        title="Record voice note"
-      >
-        <Mic size={18} />
-      </button>
-    );
-  }
-
   return (
-    <div className="flex items-center gap-3 px-3 py-2 bg-violet-600/10 border border-violet-500/30 rounded-xl animate-[fadeIn_0.2s_ease]">
-      {/* Pulse dot */}
-      <span className="w-2 h-2 bg-coral-500 rounded-full animate-pulse shrink-0" />
-
-      {/* Duration */}
-      <span className="text-sm font-mono text-paper-50 w-10 shrink-0">{formatDuration(duration)}</span>
+    <div className="flex items-center gap-3 px-3 py-1.5 animate-fade-in w-full h-full">
+      {/* Pulse dot & Duration */}
+      <div className="flex items-center gap-2 shrink-0 bg-[#FF5C6B]/10 px-2.5 py-1 rounded-full">
+        <span className="w-2 h-2 bg-[#FF5C6B] rounded-full animate-pulse" />
+        <span className="text-[13px] font-mono text-[#FF5C6B] font-medium">{formatDuration(duration)}</span>
+      </div>
 
       {/* Transcript preview */}
-      {transcript && (
-        <span className="text-xs text-ink-400 flex-1 truncate italic">"{transcript.trim()}"</span>
-      )}
-      {!transcript && (
-        <span className="text-xs text-ink-500 flex-1">Listening…</span>
-      )}
+      <div className="flex-1 min-w-0">
+        {transcript ? (
+          <span className="text-[14px] text-[#18192A] dark:text-[#F0EEEA] truncate italic block">"{transcript.trim()}"</span>
+        ) : (
+          <span className="text-[14px] text-[#9AA0B8] dark:text-[#5B6180] flex items-center gap-2 animate-pulse">
+            Listening…
+          </span>
+        )}
+      </div>
 
-      {/* Cancel */}
-      <button
-        type="button"
-        onClick={handleCancel}
-        className="p-1.5 rounded-lg text-ink-400 hover:text-coral-500 hover:bg-coral-500/10 transition-colors"
-      >
-        <X size={15} />
-      </button>
-
-      {/* Stop + send */}
-      <button
-        type="button"
-        onClick={handleStop}
-        className="p-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white transition-colors"
-      >
-        <Square size={15} />
-      </button>
+      {/* Actions */}
+      <div className="flex items-center gap-1 shrink-0">
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="w-9 h-9 flex items-center justify-center rounded-xl text-[#9AA0B8] hover:text-[#FF5C6B] hover:bg-[#FF5C6B]/10 transition-colors"
+        >
+          <X size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={handleStop}
+          className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#7C5CFF] text-white hover:bg-[#6645F0] hover:scale-105 active:scale-95 transition-all shadow-md shadow-[#7C5CFF]/30"
+        >
+          <Square size={14} fill="currentColor" />
+        </button>
+      </div>
     </div>
   );
 }
