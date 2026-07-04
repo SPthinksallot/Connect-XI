@@ -14,7 +14,7 @@ export default function EmptyState() {
         </div>
 
         <h2 className="text-3xl font-bold text-ink-900 dark:text-paper-50 mb-3 font-display transition-colors">
-          ConnectX <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">AI</span>
+          Yaap <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">AI</span>
         </h2>
         <p className="text-ink-500 text-base max-w-md leading-relaxed font-medium transition-colors">
           Select a conversation to start messaging, or search for someone new.

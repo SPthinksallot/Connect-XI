@@ -34,10 +34,10 @@ export default function SmartReplyChips({ messages, onSelect }) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 border-t border-paper-200 dark:border-ink-700 bg-paper-100/50 dark:bg-ink-900/50">
-        <Sparkles size={12} className="text-violet-500 dark:text-violet-400 animate-pulse" />
+      <div className="flex items-center gap-2 px-4 py-2 border-t border-slate-700/30 bg-slate-800/30">
+        <Sparkles size={12} className="text-violet-400 animate-pulse" />
         <Spinner size="sm" />
-        <span className="text-xs text-ink-500">Generating replies...</span>
+        <span className="text-xs text-slate-500">Generating replies...</span>
       </div>
     );
   }
@@ -45,17 +45,22 @@ export default function SmartReplyChips({ messages, onSelect }) {
   if (!replies.length) return null;
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 border-t border-paper-200 dark:border-ink-700 bg-paper-100/50 dark:bg-ink-900/50 overflow-x-auto scrollbar-thin">
-      <Sparkles size={12} className="text-violet-500 dark:text-violet-400 shrink-0 mt-0.5" />
-      {replies.map((r, i) => (
-        <button
-          key={i}
-          onClick={() => { onSelect(r); setReplies([]); }}
-          className="px-3 py-1.5 text-xs text-violet-600 dark:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/20 rounded-full whitespace-nowrap transition-colors"
-        >
-          {r}
-        </button>
-      ))}
+    <div className="flex items-center gap-2 px-4 py-2 border-t border-slate-700/30 bg-slate-800/30 overflow-x-auto scrollbar-thin">
+      <Sparkles size={12} className="text-violet-400 shrink-0 mt-0.5" />
+      {replies.map((r, i) => {
+        // Clean up any leftover json/backtick artifacts
+        const clean = String(r).replace(/```json?\s*/gi, "").replace(/```/g, "").replace(/^\[|\]$/g, "").trim();
+        if (!clean || clean.startsWith("[") || clean.startsWith("{")) return null;
+        return (
+          <button
+            key={i}
+            onClick={() => { onSelect(clean); setReplies([]); }}
+            className="px-3 py-1.5 text-xs text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/20 rounded-full whitespace-nowrap transition-colors"
+          >
+            {clean}
+          </button>
+        );
+      })}
     </div>
   );
 }

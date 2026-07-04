@@ -14,7 +14,7 @@ const openRouterChat = async (messages, model = DEFAULT_MODEL) => {
         Authorization: `Bearer ${OPENROUTER_KEY}`,
         "Content-Type": "application/json",
         "HTTP-Referer": process.env.CLIENT_URL || "http://localhost:5173",
-        "X-Title": "ConnectX AI",
+        "X-Title": "Yaap",
       },
     }
   );
@@ -38,12 +38,14 @@ const smartReply = asyncHandler(async (req, res) => {
 
   let suggestions = [];
   try {
-    suggestions = JSON.parse(raw);
+    // Strip markdown code blocks if present
+    const cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
+    suggestions = JSON.parse(cleaned);
     if (!Array.isArray(suggestions)) throw new Error();
     suggestions = suggestions.slice(0, 3).map(String);
   } catch {
     // Fallback: split by newlines or commas
-    suggestions = raw.split(/[\n,]/).map((s) => s.replace(/^["'\d.\s-]+/, "").trim()).filter(Boolean).slice(0, 3);
+    suggestions = raw.split(/[\n,]/).map((s) => s.replace(/^["'\d.\s\-`]+/, "").trim()).filter(Boolean).slice(0, 3);
   }
 
   sendSuccess(res, { suggestions });

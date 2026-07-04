@@ -24,7 +24,7 @@ export default function RegisterPage() {
           Create an account
         </h2>
         <p className="mt-2 text-center text-sm text-ink-500 max-w-xs mx-auto">
-          Join ConnectX AI and start messaging with intelligence
+          Join Yaap and start messaging with intelligence
         </p>
       </div>
 
