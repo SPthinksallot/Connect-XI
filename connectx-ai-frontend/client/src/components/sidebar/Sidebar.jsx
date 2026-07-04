@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MessageSquare, Bell, LogOut, Sun, Moon } from "lucide-react";
 import Avatar from "../common/Avatar";
+import YaapIcon from "../common/YaapIcon";
 import useAuthStore from "../../store/useAuthStore";
 import { useTheme } from "../../context/ThemeContext";
 import ProfileModal from "./ProfileModal";
@@ -14,8 +15,8 @@ export default function Sidebar() {
     <div className="w-20 shrink-0 bg-slate-950 border-r border-slate-800/50 flex flex-col items-center py-6 justify-between">
       {/* Top logo */}
       <div className="flex flex-col items-center gap-5">
-        <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-2xl flex items-center justify-center shadow-xl shadow-violet-500/30 text-white cursor-pointer hover:scale-105 transition-transform duration-200" title="Yaap">
-          <MessageSquare size={22} strokeWidth={2.5} />
+        <div className="w-12 h-12 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-orange-400 rounded-2xl flex items-center justify-center shadow-xl shadow-violet-500/30 text-white cursor-pointer hover:scale-105 transition-transform duration-200" title="Yaap">
+          <YaapIcon size={28} className="text-white" />
         </div>
 
         {/* Nav Items */}

@@ -1,5 +1,6 @@
 import React from "react";
-import { MessageSquare, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
+import YaapIcon from "../common/YaapIcon";
 
 export default function EmptyState() {
   return (
@@ -10,11 +11,11 @@ export default function EmptyState() {
 
       <div className="relative z-10 text-center px-6">
         <div className="w-24 h-24 mx-auto mb-8 bg-paper-100/80 dark:bg-ink-800/80 backdrop-blur-xl border border-paper-200 dark:border-ink-700/50 rounded-3xl flex items-center justify-center shadow-2xl shadow-violet-500/20 transition-colors">
-          <MessageSquare size={44} className="text-violet-500 dark:text-violet-400 drop-shadow-lg" />
+          <YaapIcon size={52} className="text-violet-500 dark:text-violet-400 drop-shadow-lg" />
         </div>
 
         <h2 className="text-3xl font-bold text-ink-900 dark:text-paper-50 mb-3 font-display transition-colors">
-          Yaap <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">AI</span>
+          <span className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-orange-400 bg-clip-text text-transparent">Yaap</span>
         </h2>
         <p className="text-ink-500 text-base max-w-md leading-relaxed font-medium transition-colors">
           Select a conversation to start messaging, or search for someone new.

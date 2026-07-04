@@ -1,6 +1,6 @@
 import React from "react";
 import RegisterForm from "../components/auth/RegisterForm";
-import { MessageSquare } from "lucide-react";
+import YaapIcon from "../components/common/YaapIcon";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
 
@@ -16,8 +16,8 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-paper-50 dark:bg-ink-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-body transition-colors duration-300">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-2xl flex items-center justify-center shadow-xl shadow-violet-500/30 text-white animate-[bounce_2s_infinite]">
-            <MessageSquare size={32} strokeWidth={2.5} />
+          <div className="w-16 h-16 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-orange-400 rounded-2xl flex items-center justify-center shadow-xl shadow-violet-500/30 text-white animate-[bounce_2s_infinite]">
+            <YaapIcon size={36} className="text-white" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-ink-900 dark:text-paper-50 font-display tracking-tight">
